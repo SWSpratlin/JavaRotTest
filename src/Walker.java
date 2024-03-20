@@ -2,7 +2,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 public class Walker {
-    private PApplet main;
+    private final PApplet main;
     int x;
     int y;
     int c;
@@ -44,8 +44,8 @@ public class Walker {
             }
         } catch (Exception e) {
             System.out.println("Out Of Bounds");
-            x = (int)random(main.width);
-            y = (int)random(main.height);
+            x = (int)main.random(main.width);
+            y = (int)main.random(main.height);
         }
     }
 
@@ -54,19 +54,19 @@ public class Walker {
 
         int[] numSet = new int[]{-2, 0, 2};
 
-        stepX = numSet[(int)(random(3))];
-        stepY = numSet[(int)(random(3))];
+        stepX = numSet[(int)(main.random(3))];
+        stepY = numSet[(int)(main.random(3))];
 
-        int newStep = ((y + stepY) * width) + (x + stepX);
+        int newStep = ((y + stepY) * main.width) + (x + stepX);
         int counter = 0;
 
         try {
             while (walkedImage.pixels[newStep] == c) {
 
-                stepX = numSet[(int(random(3)))];
-                stepY = numSet[(int(random(3)))];
+                stepX = numSet[(int)(main.random(3))];
+                stepY = numSet[(int)(main.random(3))];
 
-                newStep = ((stepY + y) * width) + (stepX + x);
+                newStep = ((stepY + y) * main.width) + (stepX + x);
 
                 counter++;
 
@@ -85,8 +85,8 @@ public class Walker {
             }
         } catch (Exception e) {
             System.out.println("hit the edge");
-            x = (int)(random(width));
-            y = (int)(random(height));
+            x = (int)(main.random(main.width));
+            y = (int)(main.random(main.height));
         }
 
 
@@ -96,7 +96,7 @@ public class Walker {
     }
 
     void switcherStatement() {
-        int bigStepNumber = (int)(random(1, 20));
+        int bigStepNumber = (int)(main.random(1, 20));
         switch (bigStepNumber) {
             case 1:
                 stepX = 3;
@@ -210,8 +210,8 @@ public class Walker {
             }
         } catch (Exception e) {
             System.out.println("hit the edge");
-            x = (int)(Math.random(main.width));
-            y = (int)(Math.random(main.height));
+            x = (int)(main.random(main.width));
+            y = (int)(main.random(main.height));
         }
 
         x += stepX;
@@ -260,8 +260,8 @@ public class Walker {
             }
         } catch (Exception e) {
             System.out.println("Out Of Bounds");
-            x = (int(random(main.width)));
-            y = (int(random(height)));
+            x = (int)(main.random(main.width));
+            y = (int)(main.random(main.height));
         }
     }
 
