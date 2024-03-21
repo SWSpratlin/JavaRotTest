@@ -1,6 +1,9 @@
 import processing.core.PApplet;
 import processing.core.PImage;
 
+//TODO: Create CSV for Hex Values
+//TODO: Import CSV Reader
+//TODO: Write Bleed method for use in Rot.grow()
 
 public class RotTest extends PApplet {
     Rot rot;
