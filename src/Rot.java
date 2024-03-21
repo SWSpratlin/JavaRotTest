@@ -55,7 +55,7 @@ public class Rot {
                     }
                 }
             } catch(Exception e) {
-                System.out.println("Incrementer= " + i);
+                System.out.println(STR."Incrementer= \{i}");
                 i = 0;
             }
 

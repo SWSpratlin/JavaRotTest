@@ -95,7 +95,7 @@ public class Walker {
 
     }
 
-    void switcherStatement() {
+    void _switcherStatement() {
         int bigStepNumber = (int)(main.random(1, 20));
         switch (bigStepNumber) {
             case 1:
@@ -182,7 +182,7 @@ public class Walker {
     }
 
     void bigStep(PImage walkedImage, int bigColor) {
-        switcherStatement();
+        _switcherStatement();
 
         int newStep = ((y + stepY) * main.width) + (x + stepX);
         int counter = 0;
@@ -190,7 +190,7 @@ public class Walker {
         try {
             while (walkedImage.pixels[newStep] == c) {
 
-                switcherStatement();
+                _switcherStatement();
 
                 newStep = ((stepY + y) * main.width) + (stepX + x);
 
