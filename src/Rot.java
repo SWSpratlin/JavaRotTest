@@ -27,36 +27,64 @@ public class Rot {
 
     //method to check the individual color of each entry in the pixel array
     public void colorCheck(PApplet sketch, PImage rotImg) {
-
+        int max = rotImg.pixels.length;
         this.sketch = sketch;
 
         for (int i = 0; i < rotImg.pixels.length; i++) {
-            try{
-                if (rotImg.pixels[i] == 0xFF000000) {
-                    updater[i] = 1;
+            // iterate through the whole pixel array looking or dark pixels
+            //grab any pixel that is black and assign it a "true" (0 or 1 for this)
+            if (rotImg.pixels[i] == 0xFF000000) {
+                updater[i] = 1;
+                //update the debug counter
+                counter++;
+                if (i - (sketch.width * 2) >= 0) {
+                    updater[i - (sketch.width * 2)] = 1;
                     counter++;
-                    if (rotImg.pixels[i - (sketch.width * 2)] >= 0) {
-                        updater[i - sketch.width - 1] = 1;
-                        updater[i - sketch.width] = 1;
-                        updater[i - sketch.width + 1] = 1;
-                        updater[i - 1] = 1;
-                        updater[i - (sketch.width * 2)] = 1;
-                        updater[i - 2] = 1;
-                        counter += 6;
-                    }
-                    if ((i + (sketch.width * 2)) < rotImg.pixels.length) {
-                        updater[i + 1] = 1;
-                        updater[i + sketch.width - 1] = 1;
-                        updater[i + sketch.width] = 1;
-                        updater[i + sketch.width + 1] = 1;
-                        updater[i + 2] = 1;
-                        updater[i + (sketch.width * 2)] = 1;
-                        counter += 6;
-                    }
                 }
-            } catch(Exception e) {
-                System.out.println(STR."Incrementer= \{i}");
-                i = 0;
+                if (i - (sketch.width) - 1 >= 0) {
+                    updater[i - sketch.width - 1] = 1;
+                    counter++;
+                }
+                if (i - sketch.width >= 0) {
+                    updater[i - sketch.width] = 1;
+                    counter++;
+                }
+                if (i - sketch.width + 1 >= 0) {
+                    updater[i - sketch.width + 1] = 1;
+                    counter++;
+                }
+                if (i - 2 >= 0) {
+                    updater[i - 2] = 1;
+                    counter++;
+                }
+                if (i - 1 >= 0) {
+                    updater[i - 1] = 1;
+                    counter++;
+                }
+                if (i + 1 < max) {
+                    updater[i + 1] = 1;
+                    counter++;
+                }
+                if (i + 2 < max) {
+                    updater[i + 2] = 1;
+                    counter++;
+                }
+                if (i + sketch.width - 1 < max) {
+                    updater[i + sketch.width - 1] = 1;
+                    counter++;
+                }
+                if (i + sketch.width < max){
+                    updater[i + sketch.width] = 1;
+                    counter++;
+                }
+                if (i + sketch.width +1 < max){
+                    updater[i + sketch.width +1] = 1;
+                    counter++;
+                }
+                if (i + (sketch.width * 2) < max) {
+                    updater[i + (sketch.width * 2)] = 1;
+                    counter++;
+                }
             }
 
         }
@@ -66,8 +94,9 @@ public class Rot {
      * Large method that intakes an Alpha Hex code and returns the NEXT step in transparency
      * Steps in increments of 1%
      * Make sure the hex format is "0x..." with a 2 digit hex at the start, and six numbers after
+     * Soon to be depreciated
      */
-    public int colorStep(int c) {
+    private int colorStep(int c) {
 
         //Large If/Else statement to determine the next logical step.
         if (c == 0x00000000) {
@@ -273,7 +302,7 @@ public class Rot {
         } else if (c == 0xFF000000) {
             return 0xFF000000; //return black if its already black
         } else {
-            return - 1;// returning -1, put in a TRY/CATCH
+            return -1;// returning -1, put in a TRY/CATCH
         }
 
     }

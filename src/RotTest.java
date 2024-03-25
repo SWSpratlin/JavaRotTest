@@ -1,5 +1,8 @@
 import processing.core.PApplet;
 import processing.core.PImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 
 public class RotTest extends PApplet {
@@ -11,7 +14,7 @@ public class RotTest extends PApplet {
     public PImage bgImage;
 
     public void settings() {
-        size(500, 500);
+        size(500,500);
 
         // Setting up the Images class objects
         bgImage = loadImage("BGImage.png");
