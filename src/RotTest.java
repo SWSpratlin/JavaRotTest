@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+//TODO: Create CSV for Hex Values
+//TODO: Import CSV Reader
+//TODO: Write Bleed method for use in Rot.grow()
 
 public class RotTest extends PApplet {
     Rot rot;
