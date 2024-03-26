@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-
 public class Rot {
     private PApplet sketch;
     //moving from Method to Class variable since it needs to be initialized then continually changed.
@@ -317,14 +316,10 @@ public class Rot {
         } else if (c == 0xFC000000) {
             return 0xFF000000; // return 100% opacity
         } else if (c == 0xFF000000) {
-            return 0xFF000000; //return black if its already black
+            return 0xFF000000; //return black if it is already black
         } else {
             return -1;// returning -1, put in a TRY/CATCH
         }
-
-    }
-
-    private void tableCheck() {
 
     }
 
