@@ -1,10 +1,7 @@
 import processing.core.PApplet;
 import processing.core.PImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.Arrays;
 
-//TODO: Create CSV for Hex Values
 //TODO: Import CSV Reader
 //TODO: Write Bleed method for use in Rot.grow()
 
@@ -29,9 +26,7 @@ public class RotTest extends PApplet {
         reclaim2 = new Walker(this, (int) random(width), (int) random(height));
 
         //set the walked image to Transparent
-        for (int i = 0; i < walkedImage.pixels.length; i++) {
-            walkedImage.pixels[i] = 0x00000000;
-        }
+        Arrays.fill(walkedImage.pixels, 0x00000000);
 
         //Update the Top image pixel array
         walkedImage.updatePixels();
@@ -50,7 +45,7 @@ public class RotTest extends PApplet {
         Check the color and Grow the rot.
         TODO: Roll Color check into rot.grow()
         */
-        rot.colorCheck(this, walkedImage);
+        rot.colorCheck(this);
         rot.grow(walkedImage);
 
         // Update the walked Image pixels once per loop.

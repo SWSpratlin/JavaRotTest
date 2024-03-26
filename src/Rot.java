@@ -1,15 +1,16 @@
 import processing.core.PApplet;
 import processing.core.PImage;
-import processing.data.IntList;
+import java.io.File;
+import java.util.Arrays;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 
 public class Rot {
     private PApplet sketch;
     //moving from Method to Class variable since it needs to be initialized then continually changed.
-    int darkPixel = -1;
-    int refPix = -1;
 
-    IntList darkPixels;
+    int[] pxP;
     int[] updater;
 
     //counter for debugging
@@ -19,21 +20,37 @@ public class Rot {
 
         this.sketch = sketch;
 
-        darkPixels = new IntList();
+        // array to hold the percentage value of each pixel's progression
+        pxP = new int[walkImg.pixels.length];
+        Arrays.fill(pxP, 0);
+
+        /*
+         * Initialize the updater array and fill it with 0s (should be default, but can't hurt to make sure)
+         * This will only be updated with 1s and 0s. each index is tied to a sister index in the pixel array, so
+         * any index that is written "true" (1) in the updater will be stepped to th next color in the progression
+         */
         updater = new int[walkImg.pixels.length];
+        Arrays.fill(updater, 0);
+
+        //Counter for debugging purposes
         counter = 1;
+
+        //loading file in the Constructor, so it doesn't loop and load a million times
+        String tableName = "hexPerc.csv";
+        File table = new File(tableName);
 
     }
 
     //method to check the individual color of each entry in the pixel array
-    public void colorCheck(PApplet sketch, PImage rotImg) {
-        int max = rotImg.pixels.length;
+    //TODO: Make private and work into the grow() method to simplify the main code.
+    public void colorCheck(PApplet sketch) {
+        int max = updater.length;
         this.sketch = sketch;
 
-        for (int i = 0; i < rotImg.pixels.length; i++) {
+        for (int i = 0; i < max; i++) {
             // iterate through the whole pixel array looking or dark pixels
             //grab any pixel that is black and assign it a "true" (0 or 1 for this)
-            if (rotImg.pixels[i] == 0xFF000000) {
+            if (pxP[i] == 25) {
                 updater[i] = 1;
                 //update the debug counter
                 counter++;
@@ -73,12 +90,12 @@ public class Rot {
                     updater[i + sketch.width - 1] = 1;
                     counter++;
                 }
-                if (i + sketch.width < max){
+                if (i + sketch.width < max) {
                     updater[i + sketch.width] = 1;
                     counter++;
                 }
-                if (i + sketch.width +1 < max){
-                    updater[i + sketch.width +1] = 1;
+                if (i + sketch.width + 1 < max) {
+                    updater[i + sketch.width + 1] = 1;
                     counter++;
                 }
                 if (i + (sketch.width * 2) < max) {
@@ -307,6 +324,10 @@ public class Rot {
 
     }
 
+    private void tableCheck() {
+
+    }
+
     /**
      * Grow function. Assigns each pixel that has a "True" value to the next step in
      * transparency. Needs adjusting still. Simple Method.
@@ -317,6 +338,7 @@ public class Rot {
                 img.pixels[i] = colorStep(img.pixels[i]);
                 updater[i] = 0;
                 counter--;
+                pxP[i]++;
             } else {
                 updater[i] = 0;
             }
