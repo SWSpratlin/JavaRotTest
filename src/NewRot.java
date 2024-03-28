@@ -1,5 +1,6 @@
 import processing.core.PApplet;
 import processing.core.PImage;
+
 import java.io.File;
 import java.util.Arrays;
 import java.io.FileNotFoundException;
@@ -35,12 +36,13 @@ public class NewRot {
 
     /**
      * Constructor.
+     *
      * @param s Usually "This" unless two different sketches in the same doc.
      * @param w PImage to be referenced. Necessary for width/height access used
      */
-    public NewRot(PApplet s, PImage w){
+    public NewRot(PApplet s, PImage w) {
         this.sketch = s;
-        this. img = w;
+        this.img = w;
 
         // Initialize arrays, and fill them with their default values
         pxP = new int[w.pixels.length];
@@ -56,20 +58,20 @@ public class NewRot {
     }
 
     /**
-     *  Used internally as the search method for the CSV.
+     * Used internally as the search method for the CSV.
      */
-    private int csvSearch(int hex){
-       // P stands for Percent. will be assigned a value from the CSV
+    private int csvSearch(int hex) {
+        // P stands for Percent. will be assigned a value from the CSV
         int p = 0;
-       return p;
+        return p;
     }
 
     /**
      * Used internally INSIDE a for loop to write values to each index of the pxP array.
      * This method will contain all actions for the scanning and updating of the pxP array
-     * within a single loop of a PImage 
+     * within a single loop of a PImage
      */
-    private void scan(){
+    private void scan() {
 
     }
 
