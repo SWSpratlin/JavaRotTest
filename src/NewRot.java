@@ -9,8 +9,7 @@ import java.util.Scanner;
 public class NewRot {
 
     /**
-     * PApplet for "width" and "height" references (could change to
-     * a class variable but for now this works.
+     * PApplet for "width" and "height" references (could change to a class variable but for now this works.
      */
     PApplet sketch;
     /**
@@ -18,21 +17,35 @@ public class NewRot {
      */
     PImage img;
 
-    // Counter for debugging.
+    /**
+     * Counter for debugging.
+     */
+
     int counter;
-    //Max variable for array length purposes
+    /**
+     * Max variable for array length purposes
+     */
     final int max;
 
     /**
-     * pxP is the array to hold the percentage values for each pixel. Updated using
-     * a combination of the csvSearch() and scan() methods
+     * pxP is the array to hold the percentage values for each pixel. Updated using a combination of the csvSearch() and
+     * scan() methods
      */
     int[] pxP;
     /**
-     * Updater is the array that marks each eligible pixel for a step in Opacity.
-     * Updated in the colorStep() method, executed and reset in the grow() method.
+     * Updater is the array that marks each eligible pixel for a step in Opacity. Updated in the colorStep() method,
+     * executed and reset in the grow() method.
      */
     boolean[] updater;
+
+    /**
+     * File to load CSV
+     */
+    File table;
+    /**
+     * Scanner to read CSV.
+     */
+    Scanner scanner;
 
     /**
      * Constructor.
@@ -40,7 +53,7 @@ public class NewRot {
      * @param s Usually "This" unless two different sketches in the same doc.
      * @param w PImage to be referenced. Necessary for width/height access used
      */
-    public NewRot(PApplet s, PImage w) {
+    public NewRot(PApplet s, PImage w) throws FileNotFoundException {
         this.sketch = s;
         this.img = w;
 
@@ -53,8 +66,13 @@ public class NewRot {
         Arrays.fill(updater, false);
 
         // Initialize the CSV File.
-        String tableName = "hexPerc.csv";
-        File table = new File(tableName);
+        String tableLoc = "data/hexPerc.csv";
+        table = new File(tableLoc);
+        if (table.exists()) {
+            scanner = new Scanner(table);
+        } else {
+            throw new FileNotFoundException("File Not Found. Maybe the path is wrong?");
+        }
     }
 
     /**
@@ -67,9 +85,8 @@ public class NewRot {
     }
 
     /**
-     * Used internally INSIDE a for loop to write values to each index of the pxP array.
-     * This method will contain all actions for the scanning and updating of the pxP array
-     * within a single loop of a PImage
+     * Used internally INSIDE a for loop to write values to each index of the pxP array. This method will contain all
+     * actions for the scanning and updating of the pxP array within a single loop of a PImage
      */
     private void scan() {
 

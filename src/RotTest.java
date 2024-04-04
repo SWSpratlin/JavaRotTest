@@ -2,6 +2,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import java.util.Arrays;
 
+
 //TODO: Import CSV Reader
 //TODO: Write Bleed method for use in Rot.grow()
 
@@ -14,7 +15,7 @@ public class RotTest extends PApplet {
     public PImage bgImage;
 
     public void settings() {
-        size(500,500);
+        size(500, 500);
 
         // Setting up the Images class objects
         bgImage = loadImage("BGImage.png");
