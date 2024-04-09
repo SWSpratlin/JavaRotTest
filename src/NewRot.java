@@ -73,15 +73,60 @@ public class NewRot {
         } else {
             throw new FileNotFoundException("File Not Found. Maybe the path is wrong?");
         }
+        scanner.useDelimiter(",|\\n");
     }
 
     /**
      * Used internally as the search method for the CSV.
+     * Searches for the matching color updates the pxP array
      */
-    private int csvSearch(int hex) {
-        // P stands for Percent. will be assigned a value from the CSV
-        int p = 0;
-        return p;
+    private void colorCheck(int c, int index) {
+        int threshold = 20;
+        while (scanner.hasNext()) {
+            int tempNum = Integer.decode(scanner.next());
+            if (tempNum == c) {
+                pxP[index] = scanner.nextInt(10);
+            }
+        }
+        if (pxP[index] > threshold) {
+            updater[index] = true;
+            if (index + 1 < max) {
+                updater[index + 1] = true;
+            }
+            if (index + 2 < max) {
+                updater[index + 2] = true;
+            }
+            if (index - 1 > 0) {
+                updater[index - 1] = true;
+            }
+            if (index - 2 > 0) {
+                updater[index - 2] = true;
+            }
+            if (index + img.width < max) {
+                updater[index + img.width] = true;
+            }
+            if (index + img.width + 1 < max) {
+                updater[index + img.width + 1] = true;
+            }
+            if (index + img.width - 1 < max) {
+                updater[index + img.width - 1] = true;
+            }
+            if (index + (img.width * 2) < max) {
+                updater[index + (img.width * 2)] = true;
+            }
+            if (index - img.width > 0) {
+                updater[index - img.width] = true;
+            }
+            if (index - img.width - 1 > 0) {
+                updater[index - img.width - 1] = true;
+            }
+            if (index - img.width + 1 > 0) {
+                updater[index - img.width + 1] = true;
+            }
+            if (index - (img.width * 2) > 0) {
+                updater[index - (img.width * 2)] = true;
+            }
+        }
     }
 
     /**
