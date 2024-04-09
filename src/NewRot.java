@@ -77,17 +77,23 @@ public class NewRot {
     }
 
     /**
-     * Used internally as the search method for the CSV.
-     * Searches for the matching color updates the pxP array
+     * Used internally INSIDE a for loop to write values to each index of the pxP array. This method will contain all
+     * actions for the scanning and updating of the pxP array within a single loop of a PImage. Bust be called BEFORE
+     * colorCheck to ensure the pxP array is updated.
+     * @param index usually "i" or whatever variable is being looped
+     * @param c the color to be matched. Usually "img.pixels[i]"
      */
-    private void colorCheck(int c, int index) {
+    private void scan(int c, int index) {
+
+    }
+
+    /**
+     * Used internally to search the pxP array and mark surrounding pixels for updating.
+     * @param index usually "i". Whatever variable is iterated through in a for loop
+     */
+    private void colorCheck(int index) {
         int threshold = 20;
-        while (scanner.hasNext()) {
-            int tempNum = Integer.decode(scanner.next());
-            if (tempNum == c) {
-                pxP[index] = scanner.nextInt(10);
-            }
-        }
+
         if (pxP[index] > threshold) {
             updater[index] = true;
             if (index + 1 < max) {
@@ -130,12 +136,12 @@ public class NewRot {
     }
 
     /**
-     * Used internally INSIDE a for loop to write values to each index of the pxP array. This method will contain all
-     * actions for the scanning and updating of the pxP array within a single loop of a PImage
+     * Used EXTERNALLY to call the growth of the Rot.
+     * @param sketch usually "this" but refers to the sketch it will be called in
+     * @param image the image that the rot will be growing on
      */
-    private void scan() {
+    public void grow(PApplet sketch, PImage image){
 
     }
-
 
 }
