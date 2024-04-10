@@ -78,35 +78,39 @@ public class NewRot {
         scanner.useDelimiter("[,\\n]");
     }
 
-
-    //TODO: Add a String variable to store each result from the scanner
-    //TODO: Add a regex check to look for the "0x" before decoding.
-    //TODO Decode that new string variable instead of "Integer.decode(scanner.next());
+    //TODO: Try removing the pxP array? One less array to comb.
 
     /**
-     * Used internally INSIDE a for loop to write values to each index of the pxP array. This method will contain all
-     * actions for the scanning and updating of the pxP array within a single loop of a PImage. Bust be called BEFORE
-     * colorCheck to ensure the pxP array is updated.
-     * Returns the percentage of the color being referenced.
+     * Intakes an Int (color) and spits out the associated percentage.
+     * References the "hexPerc.csv" table, each hex is paired with its OPacity percentage
      *
-     * @param index usually "i" or whatever variable is being looped
-     * @param c     the color to be matched. Usually "img.pixels[i]"
+     * @param c the color to be matched. Usually "img.pixels[i]"
      */
-    private int scan(int c, int index) {
+    private int scan(int c) {
         int hexNum;
         int decNum;
 
         //If the scanner has the next input, write the next input to the "data" string
-        if (scanner.hasNext()){
+        if (scanner.hasNext()) {
             String data = scanner.next();
 
             //if the data string starts with "0x", decode it to the Hex variable
-            if(data.startsWith("0x")){
+            //if it doesn't, increment the scanner
+            if (data.startsWith("0x")) {
                 hexNum = Integer.decode(data);
-            } else {
-                decNum = Integer.parseInt(data);
-            }
+
+                // Check if the data written matches the requested data
+                if (hexNum == c) {
+
+                    //if it does, get the next value (the percentage) and return the parsed value
+                    data = scanner.next();
+                    decNum = Integer.parseInt(data, 10);
+                    return decNum;
+                }
+            } else data = scanner.next(); //Increment the scanner if it doesn't match.
         }
+        //return 0 if there are no matches (shouldn't apply)
+        return 0;
     }
 
     /**
@@ -117,7 +121,7 @@ public class NewRot {
     private void colorCheck(int index) {
         int threshold = 20;
 
-        if (pxP[index] > threshold) {
+        if (scan(img.pixels[index]) > threshold) {
             updater[index] = true;
             if (index + 1 < max) {
                 updater[index + 1] = true;
@@ -159,13 +163,51 @@ public class NewRot {
     }
 
     /**
+     * Intakes the percentage, and increments to the next hex in the progression. Steps one percent in opacity.
+     * Uses a new scanner object so it doesn't interfere with the other scanner, therefore throws a FileNotFound exception
+     *
+     * @param p the current percentage of the pixel being referenced. probably (scan(img.pixels[index])
+     * @return the next Hex Code in the progression
+     */
+    private int colorStep(int p) throws FileNotFoundException {
+        // Set up new scanner
+        Scanner s = new Scanner(table);
+        s.useDelimiter("[,\\n]");
+
+        //when the scanner is fed a number, have it search the table for the correct value. This shouldn't be too heavy as it
+        //only needs to search anything that is marked on the updater
+        while (s.hasNext()) {
+            String data = scanner.next();
+
+            //if the data is a hex code, move on
+            if (data.startsWith("0x")) {
+                data = s.next();
+            } else {
+                //if it is not, parse it and return the NEXT value, which will be the next hex code.
+                if (Integer.parseInt(data, 10) == p) {
+                    data = s.next();
+                    return Integer.decode(data);
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
      * Used EXTERNALLY to call the growth of the Rot.
      *
      * @param sketch usually "this" but refers to the sketch it will be called in
      * @param image  the image that the rot will be growing on
      */
     public void grow(PApplet sketch, PImage image) {
+        for (int i = 0; i < max; i++){
+            colorCheck(i);
+        }
+        for (int i = 0; i < max; i++){
+            if (updater[i]){
 
+            }
+        }
     }
 
 }
