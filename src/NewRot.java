@@ -73,22 +73,33 @@ public class NewRot {
         } else {
             throw new FileNotFoundException("File Not Found. Maybe the path is wrong?");
         }
-        scanner.useDelimiter(",|\\n");
+        scanner.useDelimiter("[,\\n]");
     }
 
     /**
      * Used internally INSIDE a for loop to write values to each index of the pxP array. This method will contain all
      * actions for the scanning and updating of the pxP array within a single loop of a PImage. Bust be called BEFORE
      * colorCheck to ensure the pxP array is updated.
+     * Returns the percentage of the color being referenced.
+     *
      * @param index usually "i" or whatever variable is being looped
-     * @param c the color to be matched. Usually "img.pixels[i]"
+     * @param c     the color to be matched. Usually "img.pixels[i]"
      */
-    private void scan(int c, int index) {
-
+    private int scan(int c, int index) {
+        while (scanner.hasNext()) {
+            int num = Integer.decode(scanner.next());
+            if (num == c) {
+                return scanner.nextInt(10);
+            } else {
+                scanner.next("[,\\n]");
+            }
+        }
+        return 0;
     }
 
     /**
      * Used internally to search the pxP array and mark surrounding pixels for updating.
+     *
      * @param index usually "i". Whatever variable is iterated through in a for loop
      */
     private void colorCheck(int index) {
@@ -137,10 +148,11 @@ public class NewRot {
 
     /**
      * Used EXTERNALLY to call the growth of the Rot.
+     *
      * @param sketch usually "this" but refers to the sketch it will be called in
-     * @param image the image that the rot will be growing on
+     * @param image  the image that the rot will be growing on
      */
-    public void grow(PApplet sketch, PImage image){
+    public void grow(PApplet sketch, PImage image) {
 
     }
 
