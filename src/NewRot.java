@@ -81,6 +81,9 @@ public class NewRot {
      * actions for the scanning and updating of the pxP array within a single loop of a PImage. Bust be called BEFORE
      * colorCheck to ensure the pxP array is updated.
      * Returns the percentage of the color being referenced.
+     * TODO: Add a String variable to store each result from the scanner
+     * TODO: Add a regex check to look for the "0x" before decoding.
+     * TODO Decode that new string variable instead of "Integer.decode(scanner.next());
      *
      * @param index usually "i" or whatever variable is being looped
      * @param c     the color to be matched. Usually "img.pixels[i]"
