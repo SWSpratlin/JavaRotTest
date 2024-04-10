@@ -5,6 +5,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NewRot {
 
@@ -76,28 +78,35 @@ public class NewRot {
         scanner.useDelimiter("[,\\n]");
     }
 
+
+    //TODO: Add a String variable to store each result from the scanner
+    //TODO: Add a regex check to look for the "0x" before decoding.
+    //TODO Decode that new string variable instead of "Integer.decode(scanner.next());
+
     /**
      * Used internally INSIDE a for loop to write values to each index of the pxP array. This method will contain all
      * actions for the scanning and updating of the pxP array within a single loop of a PImage. Bust be called BEFORE
      * colorCheck to ensure the pxP array is updated.
      * Returns the percentage of the color being referenced.
-     * TODO: Add a String variable to store each result from the scanner
-     * TODO: Add a regex check to look for the "0x" before decoding.
-     * TODO Decode that new string variable instead of "Integer.decode(scanner.next());
      *
      * @param index usually "i" or whatever variable is being looped
      * @param c     the color to be matched. Usually "img.pixels[i]"
      */
     private int scan(int c, int index) {
-        while (scanner.hasNext()) {
-            int num = Integer.decode(scanner.next());
-            if (num == c) {
-                return scanner.nextInt(10);
+        int hexNum;
+        int decNum;
+
+        //If the scanner has the next input, write the next input to the "data" string
+        if (scanner.hasNext()){
+            String data = scanner.next();
+
+            //if the data string starts with "0x", decode it to the Hex variable
+            if(data.startsWith("0x")){
+                hexNum = Integer.decode(data);
             } else {
-                scanner.next("[,\\n]");
+                decNum = Integer.parseInt(data);
             }
         }
-        return 0;
     }
 
     /**
