@@ -48,6 +48,7 @@ public class NewRot {
      * Scanner to read CSV.
      */
     Scanner scanner;
+    Scanner sc;
 
     /**
      * Constructor.
@@ -72,6 +73,7 @@ public class NewRot {
         table = new File(tableLoc);
         if (table.exists()) {
             scanner = new Scanner(table);
+            sc = new Scanner(table);
         } else {
             throw new FileNotFoundException("File Not Found. Maybe the path is wrong?");
         }
@@ -169,25 +171,24 @@ public class NewRot {
      * @param p the current percentage of the pixel being referenced. probably (scan(img.pixels[index])
      * @return the next Hex Code in the progression
      */
-    private int colorStep(int p) throws FileNotFoundException {
+    private int colorStep(int p) {
         // Set up new scanner
-        Scanner s = new Scanner(table);
-        s.useDelimiter("[,\\n]");
+        sc.useDelimiter("[,\\n]");
 
         //when the scanner is fed a number, have it search the table for the correct value. This shouldn't be too heavy as it
         //only needs to search anything that is marked on the updater
-        while (s.hasNext()) {
-            String data = scanner.next();
+        while (sc.hasNext()) {
+            String data = sc.next();
 
             //if the data is a hex code, move on
             if (data.startsWith("0x")) {
-                data = s.next();
+                data = sc.next();
             } else {
-                //if it is not, parse it and return the NEXT value, which will be the next hex code.
+                //if it is not, parse it and compare. Then return the NEXT value, which will be the next hex code.
                 if (Integer.parseInt(data, 10) == p) {
-                    data = s.next();
+                    data = sc.next();
                     return Integer.decode(data);
-                }
+                } else data = sc.next(); //if it DOESN'T match, increment the scanner
             }
         }
         return 0;
@@ -205,9 +206,8 @@ public class NewRot {
         }
         for (int i = 0; i < max; i++){
             if (updater[i]){
-
+            image.pixels[i] = colorStep(scan(img.pixels[i]));
             }
         }
     }
-
 }
