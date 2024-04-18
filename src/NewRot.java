@@ -5,8 +5,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class NewRot {
 
@@ -88,15 +86,22 @@ public class NewRot {
      *
      * @param c the color to be matched. Usually "img.pixels[i]"
      */
+<<<<<<< Updated upstream
     private int scan(int c) {
         int hexNum;
         int decNum;
+=======
+    private int scan(int c, int index) {
+        int hexNum = 0;
+        int decNum = 0;
+>>>>>>> Stashed changes
 
         //If the scanner has the next input, write the next input to the "data" string
         if (scanner.hasNext()) {
             String data = scanner.next();
 
             //if the data string starts with "0x", decode it to the Hex variable
+<<<<<<< Updated upstream
             //if it doesn't, increment the scanner
             if (data.startsWith("0x")) {
                 hexNum = Integer.decode(data);
@@ -112,6 +117,24 @@ public class NewRot {
             } else data = scanner.next(); //Increment the scanner if it doesn't match.
         }
         //return 0 if there are no matches (shouldn't apply)
+=======
+            if (data.startsWith("0x")) {
+                hexNum = Integer.decode(data);
+                //Advance the scanner no matter what
+                data = scanner.next();
+            } else {
+                //if it doesn't start with 0x, write it to the decNum variable
+                decNum = Integer.parseInt(data, 10);
+                //advance the scanner no matter what
+                data = scanner.next();
+            }
+            //Advance the scanner
+            data = scanner.next();
+            if (hexNum == c) {
+                return decNum;
+            } else return 0;
+        }
+>>>>>>> Stashed changes
         return 0;
     }
 
