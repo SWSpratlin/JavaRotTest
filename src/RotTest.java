@@ -7,12 +7,13 @@ import java.util.Arrays;
 //TODO: Write Bleed method for use in Rot.grow()
 
 public class RotTest extends PApplet {
-    Rot rot;
+    ArrayRot rot;
     Walker reclaim;
     Walker reclaim2;
-    Walker walker;
+    public Walker walker;
     public PImage walkedImage;
     public PImage bgImage;
+    public int d = 10; //Frame delay. Increase to slow down rot growth
 
     public void settings() {
         size(500, 500);
@@ -21,7 +22,7 @@ public class RotTest extends PApplet {
         bgImage = loadImage("BGImage.png");
         walkedImage = createImage(this.width, this.height, ARGB);
         walkedImage.loadPixels();
-        rot = new Rot(this, walkedImage);
+        rot = new ArrayRot(this, walkedImage);
         walker = new Walker(this, (int) random(width), (int) random(height));
         reclaim = new Walker(this, (int) random(width), (int) random(height));
         reclaim2 = new Walker(this, (int) random(width), (int) random(height));
@@ -44,18 +45,17 @@ public class RotTest extends PApplet {
 
         /*
         Check the color and Grow the rot.
-        TODO: Roll Color check into rot.grow()
         */
-        rot.colorCheck(this);
-        rot.grow(walkedImage);
+        if (frameCount % d == 0) {
+            rot.grow();
+        }
 
         // Update the walked Image pixels once per loop.
         walkedImage.updatePixels();
 
-        // Debug text
         fill(0);
-        textSize(50);
-        text(rot.counter, 10, 60);
+        text(frameRate, 10, 10);
+
     }
 
     public void keyPressed() {
@@ -66,6 +66,12 @@ public class RotTest extends PApplet {
 
     }
 
+    private static final long MEGABYTE = 1024L * 1024L;
+
+    public static long bytesToMegabytes(long bytes) {
+        return bytes / MEGABYTE;
+    }
+
     /*
     Run The Sketch. Hopefully this will be replaced soon.
     TODO: Figure out how to ditch PApplet and use Frame instead.
@@ -74,5 +80,14 @@ public class RotTest extends PApplet {
         String[] processingArgs = {"RotTest"};
         RotTest rotTest = new RotTest();
         PApplet.runSketch(processingArgs, rotTest);
+        // Get the Java runtime
+        Runtime runtime = Runtime.getRuntime();
+        // Run the garbage collector
+        runtime.gc();
+        // Calculate the used memory
+        long memory = runtime.totalMemory() - runtime.freeMemory();
+        System.out.println("Used memory is bytes: " + memory);
+        System.out.println("Used memory is megabytes: "
+                + bytesToMegabytes(memory));
     }
 }
