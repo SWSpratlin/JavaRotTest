@@ -1,6 +1,7 @@
+package Main;
+
 import processing.core.PApplet;
 import processing.core.PImage;
-
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;

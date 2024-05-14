@@ -1,3 +1,5 @@
+package Main;
+
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -50,7 +52,7 @@ public class Walker {
     }
 
     //step function
-    void step(PImage walkedImage) {
+    public void step(PImage walkedImage) {
 
         int[] numSet = new int[]{-2, 0, 2};
 
@@ -95,7 +97,7 @@ public class Walker {
 
     }
 
-    void _switcherStatement() {
+    private void _switcherStatement() {
         int bigStepNumber = (int)(main.random(1, 20));
         switch (bigStepNumber) {
             case 1:
@@ -181,7 +183,7 @@ public class Walker {
         }
     }
 
-    void bigStep(PImage walkedImage, int bigColor) {
+    public void bigStep(PImage walkedImage, int bigColor) {
         _switcherStatement();
 
         int newStep = ((y + stepY) * main.width) + (x + stepX);

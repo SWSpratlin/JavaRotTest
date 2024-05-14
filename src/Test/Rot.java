@@ -1,9 +1,9 @@
+package Test;
+
 import processing.core.PApplet;
 import processing.core.PImage;
 import java.io.File;
 import java.util.Arrays;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 public class Rot {
     private PApplet sketch;
