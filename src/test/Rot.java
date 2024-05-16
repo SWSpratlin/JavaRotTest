@@ -1,4 +1,4 @@
-package Test;
+package test;
 
 import processing.core.PApplet;
 import processing.core.PImage;

@@ -1,4 +1,4 @@
-package Main;
+package main;
 
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -86,7 +86,6 @@ public class Walker {
                 }
             }
         } catch (Exception e) {
-            System.out.println("hit the edge");
             x = (int)(main.random(main.width));
             y = (int)(main.random(main.height));
         }
@@ -211,7 +210,6 @@ public class Walker {
                 }
             }
         } catch (Exception e) {
-            System.out.println("hit the edge");
             x = (int)(main.random(main.width));
             y = (int)(main.random(main.height));
         }

@@ -1,9 +1,11 @@
-package Main;
+package main;
 
+import org.jetbrains.annotations.Nullable;
 import processing.core.PApplet;
 import processing.core.PImage;
-import java.util.Collections;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ArrayRot {
@@ -32,25 +34,19 @@ public class ArrayRot {
      * Updater array the same size at the pixel array. Any index marked "true" will be stepped to the next
      * percent of opacity.
      */
-    private List<Boolean> updater;
+    private boolean[] updater;
 
     /**
      * Int array to allow for quick access of the hexArray contents. Each index of the hex array is corresponding to a hex
      * code for opacity, and instead of searching the hexArray every time for the matching color, the pXp array will be updated
      * with each pixel's current opacity during the initial pass.
      */
-    private List<Integer> pXp;
+    private int[] pXp;
 
     /**
      * Static array that stores the hex codes for opacity.
      */
     private List<Integer> hexArray;
-
-    /**
-     * Variable to determine how big of a step the opacity will take. The higher the number, the faster the growth rate.
-     */
-    int step = 1;
-    public int counter = 0;
 
     /**
      * Constructor. Called AFTER "loadPixels()" since this needs access to the pixels array
@@ -63,14 +59,14 @@ public class ArrayRot {
         img = image;
         max = img.pixels.length;
 
-        updater = new ArrayList<Boolean>(max);
+        updater = new boolean[max];
         for (int i = 0; i < max; i++) {
-            updater.add(false);
+            updater[i] = false;
         }
 
-        pXp = new ArrayList<Integer>(max);
+        pXp = new int[max];
         for (int i = 0; i < max; i++) {
-            pXp.add(0);
+            pXp[i] = 0;
         }
 
         hexArray = new ArrayList<Integer>();
@@ -175,26 +171,52 @@ public class ArrayRot {
         hexArray.add(0xFA000000);
         hexArray.add(0xFC000000);
         hexArray.add(0xFF000000);
-        hexArray = Collections.unmodifiableList(hexArray);
+        // hexArray = Collections.unmodifiableList(hexArray);
 
 
-        System.out.println("Updater: " + updater.size() + " pXp: " + pXp.size() + " hexArray: " + hexArray.size());
+        System.out.println("Updater: " + updater.length + " pXp: " + pXp.length + " hexArray: " + hexArray.size());
+    }
+
+
+    /**
+     * @param input the value to match.
+     * @return returns the index of the matching value
+     */
+    private int hexSearch(int input) {
+        int a = 0;
+        int b = hexArray.size() - 1;
+        boolean match = false;
+        while (!match) {
+            if (hexArray.get(a) != input) {
+                if (a < b) {
+                    a++;
+                }
+            } else return a;
+            if (hexArray.get(b) != input) {
+                if (b > a) {
+                    b--;
+                }
+            } else return b;
+        }
+        return 0;
     }
 
     /**
      * External method, scans the PImage pixel array. Checks each individual entry of the pixel array and does 2 things.
      * 1) Updates the current opacity percentage for each pixel in the pXp array by finding its matching color int in the hexArray.
      * 2) Marks any pixel that is above a certain threshold (index of the hexArray) for updating ("true" in the updater array).
+     *
+     * @param index Index in the master for loop.
      */
-    private void scan() {
+    private void scan(int index) {
         int color;
         // loop through th entire pixels array
-        for (int i = 0; i < max; i++) {
-            color = img.pixels[i];
-            // Comb through the hex array and look for matches. Update the pXp array with each match.
-            pXp.set(i, hexArray.indexOf(img.pixels[i]));
-            if (pXp.get(i) > oThresh)  this.updateSet(i);
-        }
+
+        color = img.pixels[index];
+        // Comb through the hex array and look for matches. Update the pXp array with each match.
+        pXp[index] = hexSearch(img.pixels[index]);
+        if (pXp[index] > oThresh) this.updateSet(index);
+
     }
 
     /**
@@ -204,27 +226,27 @@ public class ArrayRot {
      */
     private void updateSet(int index) {
         int width = s.width;
-        updater.set(index, true);
-        if (index - 1 > 0) updater.set(index - 1, true);
-        if (index - 2 > 0) updater.set(index - 2, true);
-        if (index - width > 0) updater.set(index - width, true);
-        if ((index - width - 1) > 0) updater.set(index - width - 1, true);
-        if ((index - (width * 2)) > 0) updater.set(index - (width * 2), true);
-        if ((index - width + 1) > 0) updater.set(index - width + 1, true);
-        if ((index - (width * 2) - 1) > 0) updater.set(index - (width * 2) - 1, true);
-        if ((index - (width * 2) + 1) > 0) updater.set(index - (width * 2) + 1, true);
-        if (index + 1 < max) updater.set(index + 1, true);
-        if (index + 2 < max) updater.set(index + 2, true);
-        if (index + width < max) updater.set(index + width, true);
-        if (index + width - 1 < max) updater.set(index + width - 1, true);
-        if (index + width + 1 < max) updater.set(index + width + 1, true);
-        if (index + (width * 2) < max) updater.set(index + (width * 2), true);
-        if ((index + (width * 2) - 1) < max) updater.set(index + (width * 2) - 1, true);
-        if ((index + (width * 2) + 1) < max) updater.set(index + (width * 2) + 1, true);
+        updater[index] = true;
+        if (index - 1 > 0) updater[index - 1] = true;
+        if (index - 2 > 0) updater[index - 2] = true;
+        if (index - width > 0) updater[index - width] = true;
+        if ((index - width - 1) > 0) updater[index - width - 1] = true;
+        if ((index - (width * 2)) > 0) updater[index - (width * 2)] = true;
+        if ((index - width + 1) > 0) updater[index - width + 1] = true;
+        if ((index - (width * 2) - 1) > 0) updater[index - (width * 2) - 1] = true;
+        if ((index - (width * 2) + 1) > 0) updater[index - (width * 2) + 1] = true;
+        if (index + 1 < max) updater[index + 1] = true;
+        if (index + 2 < max) updater[index + 2] = true;
+        if (index + width < max) updater[index + width] = true;
+        if (index + width - 1 < max) updater[index + width - 1] = true;
+        if (index + width + 1 < max) updater[index + width + 1] = true;
+        if (index + (width * 2) < max) updater[index + (width * 2)] = true;
+        if ((index + (width * 2) - 1) < max) updater[index + (width * 2) - 1] = true;
+        if ((index + (width * 2) + 1) < max) updater[index + (width * 2) + 1] = true;
+
     }
 
-
-    private Integer colorStep(Integer current) {
+    private @Nullable Integer colorStep(Integer current) {
         int step = current + 1;
         if (step < hexArray.size()) {
             return hexArray.get(step);
@@ -236,13 +258,15 @@ public class ArrayRot {
      * Iterates through the updater array. Any index marked for updating gets the current percentage pulled from
      */
     public void grow() {
-        scan();
-        for (int i = 0; i < max; i++) {
-            if (updater.get(i)) {
-                if (colorStep(pXp.get(i)) != null) {
-                    img.pixels[i] = colorStep(pXp.get(i));
-                    updater.set(i, false);
-                }
+        int j = 0;
+        for (int i = -(s.width * 2 - 2); i < max; i++) {
+            if (j < max) {
+                scan(j);
+                j++;
+            }
+            if (i >= 0 && colorStep(pXp[i]) != null && updater[i]) {
+                img.pixels[i] = colorStep(pXp[i]);
+                updater[i] = false;
             }
         }
     }
