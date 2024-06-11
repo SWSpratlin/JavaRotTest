@@ -209,10 +209,6 @@ public class ArrayRot {
      * @param index Index in the master for loop.
      */
     private void scan(int index) {
-        int color;
-        // loop through th entire pixels array
-
-        color = img.pixels[index];
         // Comb through the hex array and look for matches. Update the pXp array with each match.
         pXp[index] = hexSearch(img.pixels[index]);
         if (pXp[index] > oThresh) this.updateSet(index);

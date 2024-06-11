@@ -45,7 +45,6 @@ public class Walker {
                 walkedImage.pixels[nextStep + 1] = c;
             }
         } catch (Exception e) {
-            System.out.println("Out Of Bounds");
             x = (int)main.random(main.width);
             y = (int)main.random(main.height);
         }
@@ -259,7 +258,6 @@ public class Walker {
                 walkedImage.pixels[nextStep + 2] = c;
             }
         } catch (Exception e) {
-            System.out.println("Out Of Bounds");
             x = (int)(main.random(main.width));
             y = (int)(main.random(main.height));
         }

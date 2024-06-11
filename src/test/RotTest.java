@@ -3,12 +3,7 @@ package test;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
-
 import java.util.Arrays;
-
-
-//TODO: Import CSV Reader
-//TODO: Write Bleed method for use in Rot.grow()
 
 public class RotTest extends PApplet {
     ArrayRot rot;
@@ -19,6 +14,7 @@ public class RotTest extends PApplet {
     public Walker walker;
     public PImage walkedImage;
     public PImage bgImage;
+    public PImage defaultMap;
     public int d = 5; //Frame delay. Increase to slow down rot growth
     PGraphics graphics;
 
@@ -29,19 +25,35 @@ public class RotTest extends PApplet {
         System.out.println("Total = " + (this.width * this.height));
 
         // Setting up the Images class objects
+        defaultMap = loadImage("testMap.png");
+        defaultMap.loadPixels();
+        System.out.println("DefaultMap loaded");
+
         bgImage = loadImage("BGImage.png");
         bgImage.resize(width, height);
+        System.out.println("BGImage loaded");
+
         walkedImage = createImage(this.width, this.height, ARGB);
         walkedImage.loadPixels();
-        rot = new ArrayRot(this, walkedImage);
+        for (int i = 0; i < walkedImage.pixels.length; i++) {
+            if (defaultMap.pixels[i] == 0xff000000){
+                walkedImage.pixels[i] = defaultMap.pixels[i];
+            }
+        }
+        walkedImage.updatePixels();
+
+        System.out.println("Walked image loaded");
+
+        rot = new ArrayRot(this, walkedImage, defaultMap);
+        rot.drawMap();
+        System.out.println("Rot loaded");
+
         walker = new Walker(this, (int) random(width), (int) random(height));
         reclaim = new Walker(this, (int) random(width), (int) random(height));
         reclaim2 = new Walker(this, (int) random(width), (int) random(height));
         reclaim3 = new Walker(this, (int) random(width), (int) random(height));
         reclaim4 = new Walker(this, (int) random(width), (int) random(height));
-
-        //set the walked image to Transparent
-        Arrays.fill(walkedImage.pixels, 0x00000000);
+        System.out.println("Walkers loaded");
 
         //Update the Top image pixel array
         walkedImage.updatePixels();
@@ -69,7 +81,8 @@ public class RotTest extends PApplet {
         walkedImage.updatePixels();
 
         fill(0);
-        text(frameRate, 10, 10);
+        textSize(20);
+        text(frameRate, 10, 20);
 
         // Get the Java runtime
         Runtime runtime = Runtime.getRuntime();
@@ -80,6 +93,8 @@ public class RotTest extends PApplet {
             System.out.println("Used memory is megabytes: "
                     + bytesToMegabytes(memory));
         }
+        textSize(40);
+        text(("Position: " + (mouseX + (mouseY*width)) + " Color: " + Integer.toHexString(walkedImage.pixels[(mouseX + (mouseY * width))])) + " pXp: " + rot.pXp[(mouseX + (mouseY*width))], width/2, 80 + 40);
     }
 
     public void keyPressed() {

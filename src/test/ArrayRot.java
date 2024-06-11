@@ -1,10 +1,10 @@
 package test;
 
-import org.jetbrains.annotations.Nullable;
 import processing.core.PApplet;
 import processing.core.PImage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,6 +14,7 @@ public class ArrayRot {
      * Use this to call the TRANSPARENT image ON TOP OF THE GRAPHIC IMAGE.
      */
     private PImage img;
+    private PImage map;
 
     /**
      * Quick access variable to the img.pixels.length value
@@ -35,13 +36,14 @@ public class ArrayRot {
      * percent of opacity.
      */
     private boolean[] updater;
+    private final boolean[] updaterDefault;
 
     /**
      * Int array to allow for quick access of the hexArray contents. Each index of the hex array is corresponding to a hex
      * code for opacity, and instead of searching the hexArray every time for the matching color, the pXp array will be updated
      * with each pixel's current opacity during the initial pass.
      */
-    private int[] pXp;
+    public int[] pXp;
 
     /**
      * Static array that stores the hex codes for opacity.
@@ -54,20 +56,11 @@ public class ArrayRot {
      * @param sketch Usually "this" unless stated otherwise
      * @param image  Whatever image is ABOVE the graphic. Same image as the walker.
      */
-    public ArrayRot(PApplet sketch, PImage image) {
+    public ArrayRot(PApplet sketch, PImage image, PImage mapImg) {
         s = sketch;
         img = image;
+        map = mapImg;
         max = img.pixels.length;
-
-        updater = new boolean[max];
-        for (int i = 0; i < max; i++) {
-            updater[i] = false;
-        }
-
-        pXp = new int[max];
-        for (int i = 0; i < max; i++) {
-            pXp[i] = 0;
-        }
 
         hexArray = new ArrayList<Integer>();
         hexArray.add(0x00000000);
@@ -171,12 +164,36 @@ public class ArrayRot {
         hexArray.add(0xFA000000);
         hexArray.add(0xFC000000);
         hexArray.add(0xFF000000);
-        // hexArray = Collections.unmodifiableList(hexArray);
+        hexArray = Collections.unmodifiableList(hexArray);
+        System.out.println("HexArray Loaded");
 
+        System.out.println("Map1: " + Integer.toHexString(mapImg.pixels[0]) + " Map2: " + Integer.toHexString(mapImg.pixels[1]));
 
-        System.out.println("Updater: " + updater.length + " pXp: " + pXp.length + " hexArray: " + hexArray.size());
+        pXp = new int[max];
+        updater = new boolean[max];
+        updaterDefault = new boolean[max];
+        for (int i = 0; i < max; i++) {
+            updater[i] = false;
+            updaterDefault[i] = false;
+            pXp[i] = 0;
+            img.pixels[i] = 0x00000000;
+        }
     }
 
+    /**
+     * External Method called in Setup.
+     * Clones the map Image to the walked image.
+     */
+    public void drawMap() {
+        for (int i = 0; i < max; i++) {
+            if (map.pixels[i] == 0xFF000000) {
+                img.pixels[i] = 0xFF000000;
+                updaterDefault[i] = true;
+                pXp[i] = 100;
+            }
+        }
+        System.out.println("Walk1: " + Integer.toHexString(img.pixels[0]) + " Walk2: " + Integer.toHexString(img.pixels[1]));
+    }
 
     /**
      * @param input the value to match.
@@ -185,8 +202,8 @@ public class ArrayRot {
     private int hexSearch(int input) {
         int a = 0;
         int b = hexArray.size() - 1;
-        boolean match = false;
-        while (!match) {
+        boolean noMatch = false;
+        while (!noMatch) {
             if (hexArray.get(a) != input) {
                 if (a < b) {
                     a++;
@@ -209,10 +226,6 @@ public class ArrayRot {
      * @param index Index in the master for loop.
      */
     private void scan(int index) {
-        int color;
-        // loop through th entire pixels array
-
-        color = img.pixels[index];
         // Comb through the hex array and look for matches. Update the pXp array with each match.
         pXp[index] = hexSearch(img.pixels[index]);
         if (pXp[index] > oThresh) this.updateSet(index);
@@ -246,7 +259,7 @@ public class ArrayRot {
 
     }
 
-    private @Nullable Integer colorStep(Integer current) {
+    private Integer colorStep(Integer current) {
         int step = current + 1;
         if (step < hexArray.size()) {
             return hexArray.get(step);
